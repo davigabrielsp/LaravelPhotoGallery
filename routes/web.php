@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GalleryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::group(['middleware' => 'auth'], function(){
+    Route::prefix('/user')->group(function(){
+        Route::get('galleries/create', [GalleryController::class, 'create'])->name('gallery.create');
+        Route::post('galleries/store', [GalleryController::class, 'store'])->name('galleryStore');
+    });
+});
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
